@@ -1,0 +1,9 @@
+{
+  name: 'my/format',
+  format: function ({ dictionary, platform }) {
+    return template({
+      tokens: dictionary.tokens,
+      options: platform,
+    });
+  },
+}

@@ -1,0 +1,42 @@
+{
+  "peach-puff": {
+    "$value": "#FFD9c2",
+    "$type": "color",
+    "$description": ""
+  },
+  "pastel-grey-azure": {
+    "$value": "#91cbd5",
+    "$type": "color",
+    "$description": ""
+  },
+  "grey-azure": {
+    "$value": "#365960",
+    "$type": "color",
+    "$description": ""
+  },
+  "white": {
+    "$value": "#ffffff",
+    "$type": "color",
+    "$description": ""
+  },
+  "black": {
+    "$value": "#000000",
+    "$type": "color",
+    "$description": ""
+  },
+  "grey": {
+    "$value": "#686868",
+    "$type": "color",
+    "$description": ""
+  },
+  "pastel-grey-azure-2": {
+    "$value": "#b1f2fd",
+    "$type": "color",
+    "$description": ""
+  },
+  "opi-gold-2": {
+    "$value": "#f4be83",
+    "$type": "color",
+    "$description": ""
+  }
+}

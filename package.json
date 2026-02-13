@@ -1,0 +1,17 @@
+{
+  "name": "design-tokens-workflow",
+  "type" : "module",
+  "scripts": {
+    "build": "node build.js",
+    "build:tokens": "npm run build",
+    "build:ase": "node scripts/generate-ase.js",
+    "build:all": "npm run build:tokens && npm run build:ase",
+    "watch": "nodemon --watch tokens --exec npm run build:all"
+  },
+  "devDependencies": {
+    "ase-utils": "^0.1.1",
+    "fs-extra": "^11.2.0",
+    "nodemon": "^3.0.0",
+    "style-dictionary": "^5.3.0"
+  }
+}
