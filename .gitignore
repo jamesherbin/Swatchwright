@@ -1,0 +1,7 @@
+node_modules/
+package-lock.json  # (debatable - some teams commit this)
+*.log
+dist/
+build/
+coverage/
+.env
