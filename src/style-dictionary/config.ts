@@ -1,4 +1,6 @@
-{
+import { Config } from "style-dictionary";
+
+const config : Config = {
   source: ['tokens/**/*.json'],
   platforms: {
     // Web outputs
@@ -31,3 +33,5 @@
     }
   }
 }
+
+export default config;

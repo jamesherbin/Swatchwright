@@ -1,6 +1,6 @@
 {
   "name": "design-tokens-workflow",
-  "type" : "module",
+  "type": "module",
   "scripts": {
     "build": "node build.js",
     "build:tokens": "npm run build",
@@ -9,9 +9,17 @@
     "watch": "nodemon --watch tokens --exec npm run build:all"
   },
   "devDependencies": {
+    "@types/node": "^26.4.0",
     "ase-utils": "^0.1.1",
     "fs-extra": "^11.2.0",
     "nodemon": "^3.0.0",
     "style-dictionary": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=22 <25"
+  },
+  "dependencies": {
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
   }
 }

@@ -3,6 +3,7 @@ import { encode } from 'ase-utils';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { DesignToken, TokenTree} from '../tokens/types';
 
 // ============================================================================
 // ES MODULE HELPERS
@@ -22,11 +23,12 @@ const OUTPUT_PATH = join(__dirname, '../build/adobe/design-system.ase');
 // UTILITY FUNCTIONS
 // ============================================================================
 
+
 /**
  * Convert hex color to RGB float array (0-1 range)
  * ASE requires RGB values as floats between 0 and 1
  */
-function hexToRgbFloat(hex) {
+function hexToRgbFloat(hex : string) : [number, number, number] {
   // Remove # if present
   hex = hex.replace('#', '');
   
@@ -42,14 +44,29 @@ function hexToRgbFloat(hex) {
  * Recursively extract color tokens from nested object
  * Flattens the token structure and collects all colors
  */
-function extractColors(obj, path = [], colors = [], groups = {}) {
+function extractColors(obj : TokenTree, path = [], colors : string[] = [] , groups = {}) : { colors : string[], groups: string[]},  {
   Object.entries(obj).forEach(([key, value]) => {
     const currentPath = [...path, key];
-    
-    // Check if this is a token (has a value property)
-    if (value && typeof value === 'object' && '$value' in value) {
-      // Only process color tokens
-      if (value.$type === 'color' || (typeof value.value === 'string' && value.value.match(/^#[0-9a-fA-F]{6}$/))) {
+    // Only process color tokens
+      if (
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                                                                                                                       
+        
+        value.$type === 'color' || (typeof value.value === 'string' && value.value.match(/^#[0-9a-fA-F]{6}$/))) {
         const colorValue = value.$value;
         
         // Skip if it's a reference (starts with {)
@@ -59,36 +76,43 @@ function extractColors(obj, path = [], colors = [], groups = {}) {
         
         const rgb = hexToRgbFloat(colorValue);
         
-        // Get category for grouping (e.g., "brand", "semantic", "neutral")
-        const category = path[1] || 'default';
+        const colorDataPath = currentPath.join('.');
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         const colorData = {
-          name: currentPath.join('.'),
+          name: colorDataPath,
           model: 'RGB',
           color: rgb,
           type: 'global' // Use 'global' so colors update everywhere when changed
         };
-        
         colors.push(colorData);
         
+        // Get category for grouping (e.g., "brand", "semantic", "neutral")
+        const category = path[1] || 'default';
         // Group colors by category
         if (!groups[category]) {
           groups[category] = [];
         }
         groups[category].push(colorData);
       }
-    } else if (value && typeof value === 'object') {
-      // Recurse into nested objects
-      extractColors(value, currentPath, colors, groups);
-    }
   });
   
   return { colors, groups };
 }
 
+
 // ============================================================================
 // MAIN GENERATION FUNCTION
 // ============================================================================
+
 
 export function generateAseFromTokens() {
   console.log('\n🎨 Generating Adobe Swatch Exchange (ASE) file...\n');
