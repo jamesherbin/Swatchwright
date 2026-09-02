@@ -2,24 +2,36 @@
   "name": "design-tokens-workflow",
   "type": "module",
   "scripts": {
-    "build": "node build.js",
-    "build:tokens": "npm run build",
-    "build:ase": "node scripts/generate-ase.js",
-    "build:all": "npm run build:tokens && npm run build:ase",
-    "watch": "nodemon --watch tokens --exec npm run build:all"
+    "typecheck": "tsc --noEmit",
+    "compile": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build:tokens": "tsx src/style-dictionary/builder.ts",
+    "build:ase": "tsx src/cli/generate-ase.ts",
+    "build:all": "npm run typecheck && npm run build:tokens && npm run build:ase",
+    "dev": "vite",
+    "build:web": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",
     "ase-utils": "^0.1.1",
     "fs-extra": "^11.2.0",
     "nodemon": "^3.0.0",
-    "style-dictionary": "^5.3.0"
+    "style-dictionary": "^5.3.0",
+    "vitest": "^4.1.11"
   },
   "engines": {
     "node": ">=22 <25"
   },
   "dependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "@vitejs/plugin-react": "^6.1.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "tsx": "^4.23.12",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2"
   }
 }

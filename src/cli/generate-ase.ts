@@ -1,118 +1,11 @@
 // aseGenerator.js
-import { encode } from 'ase-utils';
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { DesignToken, TokenTree} from '../tokens/types';
-
-// ============================================================================
-// ES MODULE HELPERS
-// ============================================================================
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// ============================================================================
-// CONFIGURATION
-// ============================================================================
-
-const TOKENS_PATH = join(__dirname, '../tokens/opi/OPI_Colors.json');
-const OUTPUT_PATH = join(__dirname, '../build/adobe/design-system.ase');
-
-// ============================================================================
-// UTILITY FUNCTIONS
-// ============================================================================
-
-
-/**
- * Convert hex color to RGB float array (0-1 range)
- * ASE requires RGB values as floats between 0 and 1
- */
-function hexToRgbFloat(hex : string) : [number, number, number] {
-  // Remove # if present
-  hex = hex.replace('#', '');
-  
-  // Parse hex values
-  const r = parseInt(hex.substr(0, 2), 16) / 255;
-  const g = parseInt(hex.substr(2, 2), 16) / 255;
-  const b = parseInt(hex.substr(4, 2), 16) / 255;
-  
-  return [r, g, b];
-}
-
-/**
- * Recursively extract color tokens from nested object
- * Flattens the token structure and collects all colors
- */
-function extractColors(obj : TokenTree, path = [], colors : string[] = [] , groups = {}) : { colors : string[], groups: string[]},  {
-  Object.entries(obj).forEach(([key, value]) => {
-    const currentPath = [...path, key];
-    // Only process color tokens
-      if (
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-                                                                                                                       
-        
-        value.$type === 'color' || (typeof value.value === 'string' && value.value.match(/^#[0-9a-fA-F]{6}$/))) {
-        const colorValue = value.$value;
-        
-        // Skip if it's a reference (starts with {)
-        if (colorValue.startsWith('{')) {
-          return;
-        }
-        
-        const rgb = hexToRgbFloat(colorValue);
-        
-        const colorDataPath = currentPath.join('.');
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        const colorData = {
-          name: colorDataPath,
-          model: 'RGB',
-          color: rgb,
-          type: 'global' // Use 'global' so colors update everywhere when changed
-        };
-        colors.push(colorData);
-        
-        // Get category for grouping (e.g., "brand", "semantic", "neutral")
-        const category = path[1] || 'default';
-        // Group colors by category
-        if (!groups[category]) {
-          groups[category] = [];
-        }
-        groups[category].push(colorData);
-      }
-  });
-  
-  return { colors, groups };
-}
-
+import { AseColor, AseData, encode } from 'ase-utils';
+import { DesignToken, TokenTree} from '../types/types.js';
+import writeBuffer from  './ase-writer.js'
 
 // ============================================================================
 // MAIN GENERATION FUNCTION
 // ============================================================================
-
 
 export function generateAseFromTokens() {
   console.log('\n🎨 Generating Adobe Swatch Exchange (ASE) file...\n');
@@ -121,22 +14,15 @@ export function generateAseFromTokens() {
   if (!existsSync(TOKENS_PATH)) {
     console.error(`❌ Error: Token file not found at ${TOKENS_PATH}`);
     console.error('   Run "npm run build:tokens" first to generate tokens.json\n');
-    process.exit(1);
+    throw new Error();
   }
   
   // Read tokens
   const tokenData = JSON.parse(readFileSync(TOKENS_PATH, 'utf8'));
   
-  // Extract and organize colors
-  const { colors, groups } = extractColors(tokenData);
+  const tokenTree : TokenTree = tokenData;
   
-  if (colors.length === 0) {
-    console.error('❌ Error: No color tokens found in tokens.json\n');
-    process.exit(1);
-  }
-  
-  console.log(`   Found ${colors.length} color tokens`);
-  console.log(`   Organized into ${Object.keys(groups).length} groups\n`);
+  const { colors, groups } = extractColors(tokenTree);
   
   // Create ASE data structure using ase-utils format
   // Same format as adobe-swatch-exchange
@@ -150,21 +36,13 @@ export function generateAseFromTokens() {
   let aseBuffer;
   try {
     aseBuffer = encode(aseData);
+    writeBuffer( aseBuffer );
   } catch (error) {
     console.error('❌ Error encoding ASE file:', error.message);
     console.error('\n   This may be due to invalid color values.');
     console.error('   Ensure all colors are valid hex codes (e.g., #007bff)\n');
-    process.exit(1);
+    throw error;
   }
-  
-  // Ensure output directory exists
-  const outputDir = dirname(OUTPUT_PATH);
-  if (!existsSync(outputDir)) {
-    mkdirSync(outputDir, { recursive: true });
-  }
-  
-  // Write ASE file
-  writeFileSync(OUTPUT_PATH, aseBuffer);
   
   console.log('✅ Successfully generated ASE file:');
   console.log(`   ${OUTPUT_PATH}\n`);
@@ -184,17 +62,5 @@ export function generateAseFromTokens() {
 // Export additional utility functions if needed elsewhere
 export { hexToRgbFloat, extractColors };
 
-// ============================================================================
-// RUN (if executed directly)
-// ============================================================================
 
-// Check if this module is being run directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  try {
-    generateAseFromTokens();
-  } catch (error) {
-    console.error('\n❌ Unexpected error:', error.message);
-    console.error(error.stack);
-    process.exit(1);
-  }
-}
+generateAseFromTokens();

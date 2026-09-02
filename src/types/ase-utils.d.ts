@@ -12,5 +12,5 @@ declare module 'ase-utils' {
         colors: AseColor[];
     }
 
-    export function encode(data: AseData) : Buffer;
+    export function encode(data: AseData): ArrayBuffer | Uint8Array;
 }

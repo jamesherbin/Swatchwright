@@ -1,5 +1,7 @@
+export type TokenValue = string | string[];
+
 export interface DesignToken {
-  $value: string;
+  $value: TokenValue;
   $type?: string;
   $description?: string;
 }
@@ -7,4 +9,3 @@ export interface DesignToken {
 export type TokenTree = {
   [name: string]: DesignToken | TokenTree;
 };
-
