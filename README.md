@@ -144,6 +144,22 @@ npm run build:web
 
 The finished files are placed in `dist/web`.
 
+## Running with Docker
+
+Build the container:
+
+```bash
+docker build -t swatchwright .
+```
+
+Run it on port 8080:
+
+```bash
+docker run --rm -p 8080:8080 swatchwright
+```
+
+Open `http://localhost:8080` in a browser. Stop the container with `Ctrl+C`.
+
 ## Sample files
 
 Two sample token files are included:
